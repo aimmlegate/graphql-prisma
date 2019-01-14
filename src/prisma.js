@@ -8,3 +8,7 @@ const prisma = new Prisma({
 prisma.query
   .users(null, "{ id name }")
   .then(data => console.log(JSON.stringify(data, null, 2)));
+
+prisma.query
+  .comments(null, "{ id text author { id name } }")
+  .then(data => console.log(JSON.stringify(data, null, 2)));
