@@ -1,11 +1,12 @@
 const Query = {
-  users: (parent, args, { db }) => {
-    if (!args.query) {
-      return users;
-    }
-    return db.users.filter(usr =>
-      usr.name.toLowerCase().includes(args.query.toLowerCase())
-    );
+  users: (parent, args, { db, prisma }, info) => {
+    return prisma.query.users(null, info);
+    // if (!args.query) {
+    //   return db.users;
+    // }
+    // return db.users.filter(usr =>
+    //   usr.name.toLowerCase().includes(args.query.toLowerCase())
+    // );
   },
   me: () => ({
     id: "123abc",

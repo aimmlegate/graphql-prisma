@@ -5,56 +5,58 @@ const prisma = new Prisma({
   endpoint: "http://localhost:4466"
 });
 
-const createPostForUser = async (authorId, data) => {
-  const isUserExist = await prisma.exists.User({ id: authorId });
+export { prisma as default };
 
-  if (!isUserExist) {
-    throw new Error("User not found");
-  }
+// const createPostForUser = async (authorId, data) => {
+//   const isUserExist = await prisma.exists.User({ id: authorId });
 
-  const post = await prisma.mutation.createPost(
-    {
-      data: {
-        ...data,
-        author: {
-          connect: {
-            id: authorId
-          }
-        }
-      }
-    },
-    "{ author { id name email posts { id title published } } }"
-  );
+//   if (!isUserExist) {
+//     throw new Error("User not found");
+//   }
 
-  return post;
-};
+//   const post = await prisma.mutation.createPost(
+//     {
+//       data: {
+//         ...data,
+//         author: {
+//           connect: {
+//             id: authorId
+//           }
+//         }
+//       }
+//     },
+//     "{ author { id name email posts { id title published } } }"
+//   );
 
-const updatePostForUser = async (postId, data) => {
-  const isPostExist = await prisma.exists.Post({ id: postId });
+//   return post;
+// };
 
-  if (!isPostExist) {
-    throw new Error("Post not found");
-  }
+// const updatePostForUser = async (postId, data) => {
+//   const isPostExist = await prisma.exists.Post({ id: postId });
 
-  const post = await prisma.mutation.updatePost(
-    {
-      data: { ...data },
-      where: {
-        id: postId
-      }
-    },
-    "{ author { id name email posts { id title published } } }"
-  );
+//   if (!isPostExist) {
+//     throw new Error("Post not found");
+//   }
 
-  return post;
-};
+//   const post = await prisma.mutation.updatePost(
+//     {
+//       data: { ...data },
+//       where: {
+//         id: postId
+//       }
+//     },
+//     "{ author { id name email posts { id title published } } }"
+//   );
 
-// createPostForUser("cjqwg53lx000w0734p813nf6v", {
-//   title: "Great",
-//   body: "AAAAAA",
-//   published: true
-// }).then(user => console.log(JSON.stringify(user, null, 2)));
+//   return post;
+// };
 
-updatePostForUser("cjqxx8qcy000a073428kth0og", { title: "HAAAA" }).then(user =>
-  console.log(JSON.stringify(user, null, 2))
-);
+// // createPostForUser("cjqwg53lx000w0734p813nf6v", {
+// //   title: "Great",
+// //   body: "AAAAAA",
+// //   published: true
+// // }).then(user => console.log(JSON.stringify(user, null, 2)));
+
+// updatePostForUser("cjqxx8qcy000a073428kth0og", { title: "HAAAA" }).then(user =>
+//   console.log(JSON.stringify(user, null, 2))
+// );
