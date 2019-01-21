@@ -1,23 +1,35 @@
 const Query = {
-  users: (parent, args, { db, prisma }, info) => {
-    return prisma.query.users(null, info);
-    // if (!args.query) {
-    //   return db.users;
-    // }
-    // return db.users.filter(usr =>
-    //   usr.name.toLowerCase().includes(args.query.toLowerCase())
-    // );
+  users: (parent, args, { prisma }, info) => {
+    const constructQuery = args => {
+      if (args.query) {
+        return {
+          where: {
+            OR: [{ name_contains: args.query }, { email_contains: args.query }]
+          }
+        };
+      }
+      return null;
+    };
+
+    const query = constructQuery(args);
+
+    return prisma.query.users(query, info);
   },
-  posts: (parent, args, { db, prisma }, info) => {
-    return prisma.query.posts(null, info);
-    // if (!args.query) {
-    //   return db.posts;
-    // }
-    // return db.posts.filter(
-    //   pst =>
-    //     pst.title.toLowerCase().includes(args.query.toLowerCase()) ||
-    //     pst.body.toLowerCase().includes(args.query.toLowerCase())
-    // );
+  posts: (parent, args, { prisma }, info) => {
+    const constructQuery = args => {
+      if (args.query) {
+        return {
+          where: {
+            OR: [{ title_contains: args.query }, { body_contains: args.query }]
+          }
+        };
+      }
+      return null;
+    };
+
+    const query = constructQuery(args);
+
+    return prisma.query.posts(query, info);
   },
   comments: (parent, args, { db }) => db.comments
 };
