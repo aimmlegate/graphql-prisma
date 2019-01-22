@@ -25,26 +25,30 @@ const Mutation = {
     return user;
   },
 
-  createPost: (parent, args, { db, pubsub }, info) => {
-    const { author } = args.data;
-    const isUserExist = db.users.some(usr => usr.id === author);
+  updateUser: async (parent, { id, data }, { prisma }, info) => {
+    const isUserExist = await prisma.exists.User({ id });
 
     if (!isUserExist) {
       throw new Error("User not found");
     }
 
-    const newPost = {
-      id: uuidv4(),
-      ...args.data
-    };
+    const user = prisma.mutation.updateUser({ where: { id }, data }, info);
 
-    db.posts.push(newPost);
+    return user;
+  },
 
-    if (newPost.published) {
-      pubsub.publish("post", { post: { mutation: "CREATED", data: newPost } });
-    }
-
-    return newPost;
+  createPost: async (
+    parent,
+    { data: { title, body, published, author } },
+    { prisma },
+    info
+  ) => {
+    return await prisma.mutation.createPost(
+      {
+        data: { title, body, published, author: { connect: { id: author } } }
+      },
+      info
+    );
   },
 
   deletePost: (parent, args, { db, pubsub }) => {
@@ -107,32 +111,6 @@ const Mutation = {
     }
 
     return post;
-  },
-
-  updateUser: (parent, args, { db }, info) => {
-    const { id, data } = args;
-    let user = db.users.find(usr => usr.id === id);
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    if (typeof data.email === "string") {
-      const isEmailTaken = db.users.some(usr => usr.email == data.email);
-      if (isEmailTaken) {
-        throw new Error("email taken");
-      }
-    }
-
-    if (typeof data.name === "string") {
-      user.name = data.name;
-    }
-
-    if (typeof data.age !== "undefined") {
-      user.age = data.age;
-    }
-
-    return user;
   },
 
   createComment: (parent, args, { db, pubsub }, info) => {
