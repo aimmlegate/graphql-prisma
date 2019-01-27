@@ -1,6 +1,4 @@
 type Query {
-  greeting(name: String): String!
-  me: User!
   posts(query: String): [Post!]!
   add(array: [Int!]!): Float!
   grades: [Int!]!
@@ -63,6 +61,7 @@ type User {
   id: ID!
   name: String!
   email: String!
+  password: String!
   posts: [Post!]!
   comments: [Comment!]!
 }
