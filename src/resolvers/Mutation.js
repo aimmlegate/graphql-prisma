@@ -2,6 +2,28 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const Mutation = {
+  login: async (parent, { data: { email, password } }, { prisma }, info) => {
+    const isUserExist = await prisma.exists.User({ email });
+    if (!isUserExist) {
+      throw new Error("User dont exist");
+    }
+
+    const user = await prisma.query.user({
+      where: { email }
+    });
+
+    const { password: hashPassword } = user;
+    const isPasswordCorrect = await bcrypt.compare(password, hashPassword);
+    if (!isPasswordCorrect) {
+      throw new Error("Unable to login");
+    }
+
+    return {
+      user,
+      token: jwt.sign({ userId: user.id }, "secrethurrdurr")
+    };
+  },
+
   createUser: async (parent, args, { prisma }, info) => {
     const isEmailTaken = await prisma.exists.User({ email: args.data.email });
 
