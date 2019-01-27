@@ -103,21 +103,34 @@ const Mutation = {
     return prisma.mutation.deletePost({ where: { id } }, info);
   },
 
-  updatePost: async (parent, { id, data }, { prisma }, info) => {
-    return await prisma.mutation.updatePost({ where: { id }, data }, info);
+  updatePost: async (parent, { id, data }, { prisma, req }, info) => {
+    const userId = getUserId(req);
+    const postExists = await prisma.exists.Post({
+      id,
+      author: {
+        id: userId
+      }
+    });
+    if (!postExists) {
+      throw new Error("Unable to update");
+    }
+
+    return prisma.mutation.updatePost({ where: { id }, data }, info);
   },
 
   createComment: async (
     parent,
-    { data: { text, author, post } },
-    { prisma },
+    { data: { text, post } },
+    { prisma, req },
     info
   ) => {
+    const userId = getUserId(req);
+
     return prisma.mutation.createComment(
       {
         data: {
           text,
-          author: { connect: { id: author } },
+          author: { connect: { id: userId } },
           post: { connect: { id: post } }
         }
       },
@@ -125,11 +138,33 @@ const Mutation = {
     );
   },
 
-  updateComment: async (parent, { id, data }, { prisma }, info) => {
+  updateComment: async (parent, { id, data }, { prisma, req }, info) => {
+    const userId = getUserId(req);
+    const commentExists = await prisma.exists.Comment({
+      id,
+      author: {
+        id: userId
+      }
+    });
+    if (!commentExists) {
+      throw new Error("unable to delete");
+    }
+
     return prisma.mutation.updateComment({ where: { id }, data }, info);
   },
 
-  deleteComment: async (parent, { id }, { prisma }, info) => {
+  deleteComment: async (parent, { id }, { prisma, req }, info) => {
+    const userId = getUserId(req);
+    const commentExists = await prisma.exists.Comment({
+      id,
+      author: {
+        id: userId
+      }
+    });
+    if (!commentExists) {
+      throw new Error("unable to delete");
+    }
+
     return prisma.mutation.deleteComment({ where: { id } }, info);
   }
 };
