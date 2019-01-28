@@ -1,6 +1,10 @@
 import getUserId from "../utils/getUserId";
 
 const Query = {
+  me: (parent, args, { prisma, req }, info) => {
+    const userId = getUserId(req);
+    return prisma.query.user({ where: { id: userId } }, info);
+  },
   users: (parent, args, { prisma }, info) => {
     const constructQuery = args => {
       if (args.query) {

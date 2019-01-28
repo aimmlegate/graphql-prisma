@@ -5,6 +5,7 @@ type Query {
   grades: [Int!]!
   users(query: String): [User!]!
   comments: [Comment!]!
+  me: User!
 }
 
 type Mutation {
