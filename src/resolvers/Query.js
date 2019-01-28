@@ -26,16 +26,34 @@ const Query = {
       if (args.query) {
         return {
           where: {
+            published: true,
             OR: [{ title_contains: args.query }, { body_contains: args.query }]
           }
         };
       }
-      return null;
+      return { where: { published: true } };
     };
 
     const query = constructQuery(args);
 
     return prisma.query.posts(query, info);
+  },
+  myPosts: async (parent, args, { prisma, req }, info) => {
+    const userId = getUserId(req);
+    const constructQuery = args => {
+      if (args.query) {
+        return {
+          where: {
+            id: { author: { author: { id: userId } } },
+            OR: [{ title_contains: args.query }, { body_contains: args.query }]
+          }
+        };
+      }
+      return { where: { author: { id: userId } } };
+    };
+    console.log(constructQuery(args));
+    const posts = await prisma.query.posts(constructQuery(args), info);
+    return console.log(posts) || posts;
   },
   comments: (parent, args, { prisma }, info) => {
     return prisma.query.comments(null, info);
