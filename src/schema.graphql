@@ -1,5 +1,6 @@
 type Query {
   posts(query: String): [Post!]!
+  post(id: ID!): Post!
   add(array: [Int!]!): Float!
   grades: [Int!]!
   users(query: String): [User!]!
