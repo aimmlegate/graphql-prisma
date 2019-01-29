@@ -1,5 +1,5 @@
 type Query {
-  posts(query: String): [Post!]!
+  posts(query: String): [Post!]
   post(id: ID!): Post!
   myPosts(query: String): [Post!]!
   add(array: [Int!]!): Float!
@@ -73,7 +73,7 @@ input UpdateCommentInput {
 type User {
   id: ID!
   name: String!
-  email: String!
+  email: String
   password: String!
   posts: [Post!]!
   comments: [Comment!]!
