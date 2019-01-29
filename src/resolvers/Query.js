@@ -10,7 +10,7 @@ const Query = {
       if (args.query) {
         return {
           where: {
-            OR: [{ name_contains: args.query }, { email_contains: args.query }]
+            OR: [{ name_contains: args.query }]
           }
         };
       }
