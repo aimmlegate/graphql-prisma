@@ -1,11 +1,77 @@
+# скопировано с prisma.graphql так как импорты не работают
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+enum PostOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  body_ASC
+  body_DESC
+  published_ASC
+  published_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+enum CommentOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
 type Query {
-  posts(query: String, first: Int, skip: Int, after: String): [Post!]
+  posts(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: PostOrderByInput
+  ): [Post!]
   post(id: ID!): Post!
-  myPosts(query: String, first: Int, skip: Int, after: String): [Post!]!
+  myPosts(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: PostOrderByInput
+  ): [Post!]!
   add(array: [Int!]!): Float!
   grades: [Int!]!
-  users(query: String, first: Int, skip: Int, after: String): [User!]!
-  comments(first: Int, skip: Int, after: String): [Comment!]!
+  users(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: UserOrderByInput
+  ): [User!]!
+  comments(
+    first: Int
+    skip: Int
+    after: String
+    orderBy: CommentOrderByInput
+  ): [Comment!]!
   me: User!
 }
 
