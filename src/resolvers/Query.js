@@ -11,10 +11,15 @@ const Query = {
         return {
           where: {
             OR: [{ name_contains: args.query }]
-          }
+          },
+          first: args.first,
+          skip: args.skip
         };
       }
-      return null;
+      return {
+        first: args.first,
+        skip: args.skip
+      };
     };
 
     const query = constructQuery(args);
@@ -28,10 +33,12 @@ const Query = {
           where: {
             published: true,
             OR: [{ title_contains: args.query }, { body_contains: args.query }]
-          }
+          },
+          first: args.first,
+          skip: args.skip
         };
       }
-      return { where: { published: true } };
+      return { where: { published: true }, first: args.first, skip: args.skip };
     };
 
     const query = constructQuery(args);

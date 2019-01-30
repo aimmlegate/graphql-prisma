@@ -1,10 +1,10 @@
 type Query {
-  posts(query: String): [Post!]
+  posts(query: String, first: Int, skip: Int): [Post!]
   post(id: ID!): Post!
   myPosts(query: String): [Post!]!
   add(array: [Int!]!): Float!
   grades: [Int!]!
-  users(query: String): [User!]!
+  users(query: String, first: Int, skip: Int): [User!]!
   comments: [Comment!]!
   me: User!
 }
