@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const JWT_SECRET = "secrethurrdurr";
+export const JWT_SECRET = process.env.JWT_SECRET;
 
 export const OPTIONS = { expiresIn: "30d" };
 
