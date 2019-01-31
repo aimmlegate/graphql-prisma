@@ -1,6 +1,8 @@
 import { Prisma } from "prisma-binding";
 import { fragmentReplacements } from "./resolvers";
 
+console.log(process.env.PRISMA_ENDPOINT);
+
 const prisma = new Prisma({
   typeDefs: "src/generated/prisma.graphql",
   fragmentReplacements,
