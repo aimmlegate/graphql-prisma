@@ -7,14 +7,18 @@
     "start": "node dist/index.js",
     "heroku-postbuild": "babel src --out-dir dist --copy-files",
     "dev": "env-cmd ./config/dev.env nodemon src/index.js --ext js,graphql --exec babel-node",
+    "dev-client": "parcel client/index.html -d client-dist",
     "test": "jest --watch",
     "get-schema": "graphql get-schema -p prisma --dotenv config/dev.env"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
     "@babel/polyfill": "^7.2.5",
-    "babel-cli": "^6.26.0",
+    "@babel/preset-env": "^7.3.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bcryptjs": "^2.4.3",
@@ -22,10 +26,10 @@
     "graphql-cli": "^3.0.4",
     "graphql-yoga": "^1.14.10",
     "jsonwebtoken": "^8.4.0",
+    "parcel-bundler": "^1.11.0",
     "prisma-binding": "^2.2.14"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.3.1",
     "jest": "^24.0.0",
     "nodemon": "^1.18.8"
   }
