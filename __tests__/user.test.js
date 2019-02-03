@@ -25,12 +25,16 @@ test("Shold create a new user", async () => {
     }
   `;
 
-  const resp = await client.mutate({
+  const {
+    data: {
+      createUser: { id }
+    }
+  } = await client.mutate({
     mutation: createUser
   });
 
   const isUserCreated = await prisma.exists.User({
-    email: "andrew@example.com"
+    id
   });
 
   expect(isUserCreated).toBe(true);
