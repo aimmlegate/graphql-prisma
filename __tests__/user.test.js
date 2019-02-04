@@ -107,3 +107,41 @@ test("Should expose public posts", async () => {
 
   expect(response.data.posts.length).toBe(1);
 });
+
+test("Should not login with bad credentials", async () => {
+  const login = gql`
+    mutation {
+      login(data: { email: "exaple@email.ru", password: "password" }) {
+        token
+      }
+    }
+  `;
+  await expect(client.mutate({ mutation: login })).rejects.toThrow();
+});
+
+test("Should login with correct credentials", async () => {
+  const login = gql`
+    mutation {
+      login(data: { email: "jen@example.com", password: "Red09121234" }) {
+        token
+      }
+    }
+  `;
+});
+
+test("Should not create a user with short pass", async () => {
+  const createUser = gql`
+    mutation {
+      createUser(
+        data: { name: "Andrew2", email: "andrew2@example2.com", password: "My" }
+      ) {
+        token
+        user {
+          id
+        }
+      }
+    }
+  `;
+
+  await expect(client.mutate({ mutation: createUser })).rejects.toThrow();
+});
