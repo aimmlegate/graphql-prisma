@@ -2,7 +2,7 @@ import "@babel/polyfill/noConflict";
 import "cross-fetch/polyfill";
 import { gql } from "apollo-boost";
 import prisma from "../src/prisma";
-import seedDB from "./utils/seedDB";
+import seedDB, { userOne } from "./utils/seedDB";
 import getClient from "./utils/getClent";
 
 const client = getClient();
@@ -96,4 +96,26 @@ test("Should not create a user with short pass", async () => {
   `;
 
   await expect(client.mutate({ mutation: createUser })).rejects.toThrow();
+});
+
+test("Should fetch user profile", async () => {
+  const client = getClient(userOne.jwt);
+
+  const getProfile = gql`
+    query {
+      me {
+        id
+        name
+        email
+      }
+    }
+  `;
+
+  const {
+    data: {
+      me: { id }
+    }
+  } = await client.query({ query: getProfile });
+
+  expect(id).toBe(userOne.user.id);
 });
